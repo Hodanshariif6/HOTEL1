@@ -6,6 +6,7 @@ const cors = require("cors");
 const RoomRouter = require("./Router/RoomRouter");
 const orderRoute = require("./Router/orderRoute");
 const newsRouter = require("./Router/NewsRouter");
+const CabashoRouter = require("./Router/CabashoRouter");
 const customerRouter = require("./Router/CustomerRouter");
 
 const app = express();
@@ -22,6 +23,7 @@ app.use("/allImages", express.static("images"));
 app.use(newsRouter);
 app.use(RoomRouter);
 app.use(orderRoute);
+app.use(CabashoRouter);
 app.use(customerRouter);
 
 // MongoDB Connection

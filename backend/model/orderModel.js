@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
       {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Room", // ✅ Waa muhiim
+          ref: "Room",
           required: true,
         },
         name: String,
@@ -23,8 +23,10 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     TotalAmount: { type: Number, required: true },
+    checkIn: { type: Date, required: true },   
+    checkOut: { type: Date, required: true },  
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("OrderModel", orderSchema); // ✅ Magaca saxda ah
+module.exports = mongoose.model("OrderModel", orderSchema);

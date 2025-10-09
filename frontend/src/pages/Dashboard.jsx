@@ -26,7 +26,7 @@ function Dashboard() {
     { name: "News", icon: <FiFileText />, path: "/new" },
     { name: "Add Room", icon: <FiPlusCircle />, path: "/registerroom" },
     { name: "Add News", icon: <FiFileText />, path: "/news" },
-    { name: "Reports", icon: <FiBarChart2 />, path: "/rep" },
+    { name: "Cabasho", icon: <FiBarChart2 />, path: "/cus" },
     { name: "Setting", icon: <FiSettings />, path: "/setting" },
   ];
 

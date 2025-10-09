@@ -12,13 +12,11 @@ import News from "./pages/News"
 import Slidebar from "./pages/Slidebar"
 import AddNews from "./pages/AddNew"
 import AddRoom from "./pages/AddRoom"
-// import Setting from "./pages/Setting"
-// import Report from "./pages/Report"
 import UpdateRoom from "./components/updateRoom"
 import UpdateNews from "./components/updateNews"
 import Setting from "./pages/Setting"
 import Profile from "./pages/profile"
-// import Report from "./pages/Report"
+import Customer from "./pages/Customer"
 
 function MainLayout({ children }) {
   return (
@@ -84,14 +82,14 @@ function App() {
           </DashboardLayout>
         }
       />
-        {/* <Route
-        path="/rep"
+        <Route
+        path="/cus"
         element={
           <DashboardLayout>
-            < Report/>
+            < Customer/>
           </DashboardLayout>
         }
-      /> */}
+      />
 
                 <Route
         path="/Setting"
