@@ -31,5 +31,11 @@ const { verifyToken } = require("../middleware/Auth")
 // Profile routes (protected)
 router.get("/profile", verifyToken, getProfile)
 router.put("/profile", verifyToken, updateProfile)
+const { forgotPassword, resetPassword } = require("../controller/CustomerController");
+
+// Forgot password routes
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
+
 
 module.exports = router

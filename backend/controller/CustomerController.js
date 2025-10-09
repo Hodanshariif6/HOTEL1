@@ -1,6 +1,8 @@
 const customerModel = require("../model/CustomerModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const crypto = require("crypto");
+
 
 const JWT_SECRET = process.env.JWT_Secret || "myJwt_secret_1233"
 
@@ -167,6 +169,85 @@ const updateProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
+}
+// ============================
+// 💡 Add inside CustomerController.js
+// ============================
+
+// Step 1: Forgot Password (generate token)
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const user = await customerModel.findOne({ email });
+    if (!user) {
+      // For security, don't reveal if email exists or not
+      return res.json({ 
+        message: "If the email exists, a reset token has been sent" 
+      });
+    }
+
+    // Create reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    
+    // Save token and expiration
+    user.resetToken = resetToken;
+    user.resetTokenExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+    
+    await user.save();
+
+    console.log(`Reset token for ${email}: ${resetToken}`); // For testing
+
+    res.json({
+      message: "Reset token generated successfully. Use it to reset password.",
+      resetToken // In production, send this via email
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+// Step 2: Reset Password
+const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: "Token and new password required" });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    // Find user with valid token
+    const user = await customerModel.findOne({
+      resetToken: token,
+      resetTokenExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ 
+        message: "Invalid or expired token",
+        details: "Token might be wrong or expired (valid for 10 minutes)"
+      });
+    }
+
+    // Update password and clear reset token
+    user.password = await bcrypt.hash(newPassword, 12);
+    user.resetToken = null;
+    user.resetTokenExpire = null;
+    
+    await user.save();
+
+    res.json({ 
+      message: "Password reset successfully",
+      success: true 
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 };
 
 module.exports = { 
@@ -177,7 +258,9 @@ module.exports = {
   toggleUserStatus, 
   getAllUsers,
   getProfile,
-  updateProfile
+  updateProfile,
+  forgotPassword,
+  resetPassword
 }
 
 

@@ -17,6 +17,7 @@ import UpdateNews from "./components/updateNews"
 import Setting from "./pages/Setting"
 import Profile from "./pages/profile"
 import Customer from "./pages/Customer"
+import ForgotPassword from "./pages/ForgotPassword"
 
 function MainLayout({ children }) {
   return (
@@ -62,6 +63,14 @@ function App() {
         element={
           <MainLayout>
             <Profile />
+          </MainLayout>
+        }
+      />
+          <Route
+        path="/forgot-password"
+        element={
+          <MainLayout>
+            <ForgotPassword />
           </MainLayout>
         }
       />
