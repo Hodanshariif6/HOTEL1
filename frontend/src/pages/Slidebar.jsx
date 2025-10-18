@@ -54,13 +54,13 @@ export default function Slidebar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const incomeRes = await axios.get("https://hotel1-vp7d.onrender.com/getIncome/order");
+        const incomeRes = await axios.get("https://hotel1-1.onrender.com/getIncome/order");
         setTotalIncome(incomeRes.data?.[0]?.totalIncome || 0);
 
-        const topCustRes = await axios.get("https://hotel1-vp7d.onrender.com/getTopCustomer/order");
+        const topCustRes = await axios.get("https://hotel1-1.onrender.com/getTopCustomer/order");
         setTopCustomers(topCustRes.data || []);
 
-        const ordersRes = await axios.get("https://hotel1-vp7d.onrender.com/read/order");
+        const ordersRes = await axios.get("https://hotel1-1.onrender.com/read/order");
         const data = ordersRes.data || [];
         setOrders(data);
 
@@ -99,7 +99,7 @@ export default function Slidebar() {
     if (!order) return;
     if (!window.confirm(`Delete order for ${order.customer.name}?`)) return;
     try {
-      await axios.delete(`https://hotel1-vp7d.onrender.com/delete/order/${orderId}`);
+      await axios.delete(`https://hotel1-1.onrender.com/delete/order/${orderId}`);
       setOrders((prev) => prev.filter((o) => o._id !== orderId));
       setTotalIncome((prev) => prev - (order.TotalAmount || 0));
     } catch (err) {
@@ -236,7 +236,7 @@ export default function Slidebar() {
                   <td className="p-2">{o.customer.phone}</td>
                   <td className="p-2">
                     <img
-                      src={`https://hotel1-vp7d.onrender.com/allImages/${r.prImage?.trim()}`}
+                      src={`https://hotel1-1.onrender.com/allImages/${r.prImage?.trim()}`}
                       alt={r.name}
                       className="w-16 h-12 sm:w-20 sm:h-16 object-cover rounded-lg mx-auto border border-gray-600"
                     />

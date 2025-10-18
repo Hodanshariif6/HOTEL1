@@ -26,7 +26,7 @@ export default function RegisterAdmin() {
     setLoading(true);
 
     try {
-      const res = await axios.post("https://hotel1-vp7d.onrender.com/create/admin", formData);
+      const res = await axios.post("https://hotel1-1.onrender.com/create/admin", formData);
 
       toast.success("✅ Admin registered successfully!", {
         position: "top-center",

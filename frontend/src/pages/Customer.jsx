@@ -7,7 +7,7 @@ export default function Customer() {
 
   const loadData = async () => {
     try {
-      const res = await axios.get("https://hotel1-vp7d.onrender.com/Cabasho");
+      const res = await axios.get("https://hotel1-1.onrender.com/Cabasho");
       setData(res.data);
     } catch (error) {
       console.error(error);
@@ -21,7 +21,7 @@ export default function Customer() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://hotel1-vp7d.onrender.com/Cabasho/${id}`);
+      await axios.delete(`https://hotel1-1.onrender.com/Cabasho/${id}`);
       loadData(); // Reload after delete
     } catch (error) {
       console.error(error);
