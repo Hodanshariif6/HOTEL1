@@ -9,7 +9,6 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [justLoggedIn, setJustLoggedIn] = useState(false);
 
-  // Function to check for image updates
   const checkForImageUpdate = () => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -21,7 +20,6 @@ function Header() {
     }
   };
 
-  // Function to load user image from localStorage
   const loadUserImage = (userObj) => {
     if (userObj && userObj.email) {
       const savedImage = localStorage.getItem(`userImage_${userObj.email}`);
@@ -31,7 +29,6 @@ function Header() {
     }
   };
 
-  // Check if user is logged in and get image
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
@@ -40,36 +37,29 @@ function Header() {
       const userObj = JSON.parse(userData);
       setUser(userObj);
 
-      // Load user image from localStorage (persistent storage)
       loadUserImage(userObj);
 
-      // Check if user just logged in (redirect to profile)
       const loginTime = localStorage.getItem("loginTime");
       const currentTime = new Date().getTime();
       
-      if (loginTime && (currentTime - parseInt(loginTime)) < 5000) { // Within 5 seconds of login
+      if (loginTime && (currentTime - parseInt(loginTime)) < 5000) { 
         setJustLoggedIn(true);
-        localStorage.removeItem("loginTime"); // Clean up
+        localStorage.removeItem("loginTime"); 
         
-        // Only redirect if we're not already on profile page
         if (!location.pathname.includes('/profile')) {
           navigate("/profile");
         }
       }
     } else {
-      // User is not logged in, clear user state but keep image in localStorage
       setUser(null);
       setUserImage(null);
     }
 
-    // Set up interval to check for image updates every second
     const interval = setInterval(checkForImageUpdate, 1000);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, [userImage, navigate, location]);
 
-  // Listen for storage events (when localStorage changes in another tab/window)
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key && e.key.startsWith('userImage_') && user) {
@@ -84,7 +74,6 @@ function Header() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [user, userImage]);
 
-  // Custom event listener for image updates within the same tab
   useEffect(() => {
     const handleImageUpdate = () => {
       if (user) {
@@ -100,7 +89,6 @@ function Header() {
   }, [user]);
 
   const handleLogOut = () => {
-    // Clear authentication data but KEEP user image in localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("customer");
@@ -122,24 +110,19 @@ function Header() {
     <header className="sticky top-0 z-50 w-full bg-white shadow-md border-b">
       <div className="container mx-auto flex items-center justify-between p-4">
 
-        {/* Logo */}
         <Link to="/" className="text-3xl font-bold text-gray-800 hover:text-purple-600 transition">
           HOR<span className="text-purple-500">YAAL</span>
         </Link>
 
-        {/* Center Navigation */}
         <nav className="hidden md:flex gap-8 mx-auto">
           <Link to="/" className="text-gray-700 hover:text-purple-600 font-medium transition">Home</Link>
           <Link to="/about" className="text-gray-700 hover:text-purple-600 font-medium transition">About</Link>
           <Link to="/contact" className="text-gray-700 hover:text-purple-600 font-medium transition">Contact</Link>
         </nav>
 
-        {/* Right Section */}
         <div className="hidden md:flex items-center gap-4">
           {user ? (
-            // ✅ USER IS LOGGED IN - Show user info with image
             <>
-              {/* User Profile with Image - Auto redirects new users */}
               <div
                 className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition group relative"
                 onClick={handleProfileClick}
@@ -181,7 +164,6 @@ function Header() {
                 </div>
               </div>
 
-              {/* Booking Now Button */}
               <Link to="/booking">
                 <button className="px-6 py-2 bg-[#5facc0] hover:bg-[#4a9cb0] text-white rounded-lg font-medium transition shadow-md hover:shadow-lg flex items-center gap-2">
                   <i className="fa-solid fa-calendar-check"></i>
@@ -189,7 +171,6 @@ function Header() {
                 </button>
               </Link>
 
-              {/* Logout Button */}
               <button
                 onClick={handleLogOut}
                 className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition flex items-center gap-2"
@@ -199,7 +180,6 @@ function Header() {
               </button>
             </>
           ) : (
-            // ❌ USER NOT LOGGED IN - Show login/register
             <>
               <Link to="/login">
                 <button className="px-6 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg font-medium transition">
@@ -215,21 +195,18 @@ function Header() {
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
         <div className="md:hidden">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-2xl p-2 text-gray-600 hover:text-purple-600 transition rounded-lg hover:bg-gray-100"
+            className="text-3xl  p-2 text-white w-12 hover:text-black transition rounded-lg hover:bg-gray-100 bg-purple-400"
           >
             {menuOpen ? "✕" : "☰"}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-white shadow-lg border-t border-gray-200 p-4 flex flex-col gap-3">
-          {/* Navigation Links */}
           <Link 
             to="/" 
             onClick={() => setMenuOpen(false)}
@@ -252,11 +229,8 @@ function Header() {
             Contact
           </Link>
 
-          {/* Conditional Content */}
           {user ? (
-            // ✅ MOBILE: USER LOGGED IN - Show user info with image
             <>
-              {/* User Profile with Image */}
               <div 
                 className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 cursor-pointer relative"
                 onClick={handleProfileClick}
@@ -295,7 +269,6 @@ function Header() {
                 </div>
               </div>
 
-              {/* Booking Now */}
               <Link 
                 to="/booking" 
                 onClick={() => setMenuOpen(false)}
@@ -305,7 +278,6 @@ function Header() {
                 Booking Now
               </Link>
 
-              {/* Logout */}
               <button 
                 onClick={handleLogOut}
                 className="px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition flex items-center justify-center gap-2"
@@ -315,7 +287,6 @@ function Header() {
               </button>
             </>
           ) : (
-            // ❌ MOBILE: USER NOT LOGGED IN - Show login/register
             <>
               <Link 
                 to="/login" 

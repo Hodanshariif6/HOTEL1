@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react"
 import { Upload, User, Mail } from "lucide-react"
-import Profile from "./profile"
+// import Profile from "./profile"
 
 function Button({ children, className = "", ...props }) {
   return (
@@ -204,7 +204,7 @@ export default function Setting() {
         </div>
       </div>
 
-      <Profile name={name} email={email} profileImage={profileImage} />
+      {/* <Profile name={name} email={email} profileImage={profileImage} /> */}
     </div>
   )
 }

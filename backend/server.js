@@ -8,6 +8,7 @@ const orderRoute = require("./Router/orderRoute");
 const newsRouter = require("./Router/NewsRouter");
 const CabashoRouter = require("./Router/CabashoRouter");
 const customerRouter = require("./Router/CustomerRouter");
+const adminRouter = require("./Router/adminRouter");
 
 const app = express();
 const PORT = process.env.PORT || 7000; // PORT waa capital
@@ -25,6 +26,7 @@ app.use(RoomRouter);
 app.use(orderRoute);
 app.use(CabashoRouter);
 app.use(customerRouter);
+app.use( adminRouter);
 
 // MongoDB Connection
 mongoose.connect(process.env.DB_URL)

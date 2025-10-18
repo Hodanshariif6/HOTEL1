@@ -8,8 +8,8 @@ const CustomerSchema = new mongoose.Schema({
   role: { type: String, enum: ["customer", "admin"], default: "customer" },
   profileImage: { type: String, default: "" },
   isActive: { type: Boolean, default: true },
-  resetToken: { type: String, default: null }, // ✅ Fixed: added default null
-  resetTokenExpire: { type: Date, default: null }, // ✅ Fixed: added default null
+  resetToken: { type: String, default: null },
+  resetTokenExpire: { type: Date, default: null }, 
   createdAt: { type: Date, default: Date.now }
 });
 

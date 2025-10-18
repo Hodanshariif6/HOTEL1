@@ -53,7 +53,7 @@ export default function Contact() {
     <>
       <ToastContainer />
       <div className="min-h-screen bg-gray-50 flex justify-center items-center p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-6xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full max-w-6xl">
           {/* Visit Center Info */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
@@ -112,59 +112,70 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Cabasho Form */}
-          <motion.form
-            onSubmit={handleFormSubmit}
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="bg-white p-10 rounded-2xl shadow-2xl max-w-3xl mx-auto"
-          >
-            <h2 className="text-4xl font-extrabold mb-10 text-center text-gray-800">Cabasho</h2>
+      <motion.form
+  onSubmit={handleFormSubmit}
+  initial={{ opacity: 0, x: 60 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.8 }}
+  className="bg-white p-10 rounded-2xl shadow-2xl max-w-3xl mx-auto flex flex-col items-center"
+>
+  {/* Sawirka kore */}
+  <img
+    src="https://images.pexels.com/photos/34253504/pexels-photo-34253504.jpeg"
+    alt="Cabasho"
+    className="w-full h-56 object-cover rounded-t-2xl mb-6"
+  />
 
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your full name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full text-black p-4 border border-gray-300 rounded-xl shadow-sm 
-                         focus:outline-none focus:ring-2 focus:ring-pink-400 mb-6"
-              required
-            />
+  {/* Cinwaan */}
+  <h2 className="text-4xl font-extrabold mb-8 text-center text-gray-800">
+    Cabasho
+  </h2>
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email address"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full text-black p-4 border border-gray-300 rounded-xl shadow-sm 
-                         focus:outline-none focus:ring-2 focus:ring-pink-400 mb-6"
-              required
-            />
+  {/* Input-yada form-ka */}
+  <input
+    type="text"
+    name="name"
+    placeholder="Enter your full name"
+    value={formData.name}
+    onChange={handleChange}
+    className="w-full text-black p-4 border border-gray-300 rounded-xl shadow-sm 
+               focus:outline-none focus:ring-2 focus:ring-pink-400 mb-6"
+    required
+  />
 
-            <textarea
-              name="message"
-              placeholder="Write your message here..."
-              value={formData.message}
-              onChange={handleChange}
-              rows="5"
-              className="w-full text-black p-4 border border-gray-300 rounded-xl shadow-sm 
-                         focus:outline-none focus:ring-2 focus:ring-pink-400 mb-6 resize-none"
-              required
-            ></textarea>
+  <input
+    type="email"
+    name="email"
+    placeholder="Enter your email address"
+    value={formData.email}
+    onChange={handleChange}
+    className="w-full text-black p-4 border border-gray-300 rounded-xl shadow-sm 
+               focus:outline-none focus:ring-2 focus:ring-pink-400 mb-6"
+    required
+  />
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              type="submit"
-              className="w-full bg-gradient-to-r from-pink-500 to-green-400 text-white py-4 rounded-xl 
-                         font-semibold text-lg shadow-lg hover:opacity-90 transition duration-300"
-            >
-              Send Message
-            </motion.button>
-          </motion.form>
+  <textarea
+    name="message"
+    placeholder="Write your message here..."
+    value={formData.message}
+    onChange={handleChange}
+    rows="5"
+    className="w-full text-black p-4 border border-gray-300 rounded-xl shadow-sm 
+               focus:outline-none focus:ring-2 focus:ring-pink-400 mb-6 resize-none"
+    required
+  ></textarea>
+
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    type="submit"
+    className="w-full bg-gradient-to-r from-pink-500 to-green-400 text-white py-4 rounded-xl 
+               font-semibold text-lg shadow-lg hover:opacity-90 transition duration-300"
+  >
+    Send Message
+  </motion.button>
+</motion.form>
+
         </div>
       </div>
 
@@ -175,7 +186,7 @@ export default function Contact() {
       />
 
       {/* Comments */}
-      <div className="container mx-auto p-8">
+      <div className="container mx-auto p-8 mt-20">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Contact Us</h1>
 
         <form onSubmit={handleCommentSubmit} className="mb-8 flex flex-col gap-4">

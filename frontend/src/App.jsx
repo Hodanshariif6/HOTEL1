@@ -18,6 +18,9 @@ import Setting from "./pages/Setting"
 import Profile from "./pages/profile"
 import Customer from "./pages/Customer"
 import ForgotPassword from "./pages/ForgotPassword"
+import ProtectedRouter from "./pages/ProtectedRouter"
+import LoginAdmin from "./pages/LoginAdmin"
+import RegisterAdmin from "./pages/Registeradmin"
 
 function MainLayout({ children }) {
   return (
@@ -86,60 +89,75 @@ function App() {
           <Route
         path="/dashboard"
         element={
+          <ProtectedRouter>
           <DashboardLayout>
           <Slidebar/>
           </DashboardLayout>
+          </ProtectedRouter>
         }
       />
         <Route
         path="/cus"
         element={
-          <DashboardLayout>
+   <ProtectedRouter>  
+           <DashboardLayout>
             < Customer/>
           </DashboardLayout>
+           </ProtectedRouter> 
         }
       />
 
                 <Route
         path="/Setting"
         element={
+             <ProtectedRouter>
           <DashboardLayout>
             < Setting/>
           </DashboardLayout>
+          </ProtectedRouter>
         }
       />
-      
+   
+       
       <Route
         path="/updateRoom/:id"
         element={
+             <ProtectedRouter>
           <DashboardLayout>
             <UpdateRoom/>
           </DashboardLayout>
+          </ProtectedRouter>
         }
       />
       
       <Route
       path="/upnew/:id" 
         element={
+             <ProtectedRouter>
           <DashboardLayout>
             <UpdateNews />
           </DashboardLayout>
+         </ProtectedRouter>
         }
       />
       <Route
         path="/registerroom"
         element={
+             <ProtectedRouter>
           <DashboardLayout>
             <AddRoom/>
           </DashboardLayout>
+          </ProtectedRouter>
         }
       />
        <Route
         path="/news"
         element={
+             <ProtectedRouter>
           <DashboardLayout>
             <AddNews />
           </DashboardLayout>
+          </ProtectedRouter>
         }
       />
 
@@ -167,6 +185,23 @@ function App() {
           </MainLayout>
         }
       />
+             <Route
+        path="/registerAdmin"
+        element={
+          <MainLayout>
+            <RegisterAdmin />
+          </MainLayout>
+        }
+      />
+       <Route
+        path="/loginAdmin"
+        element={
+          <MainLayout>
+            <LoginAdmin/>
+          </MainLayout>
+        }
+      />
+
 
 
             <Route

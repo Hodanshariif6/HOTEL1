@@ -1,106 +1,60 @@
-const customerModel = require("../model/CustomerModel")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
+const customerModel = require("../model/CustomerModel");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
+const JWT_SECRET = process.env.JWT_Secret || "myJwt_secret_1233";
 
-const JWT_SECRET = process.env.JWT_Secret || "myJwt_secret_1233"
 
-// Create Admin
-const createAdmin = async (req, res) => {
-  try {
-    const { name, phone, email, password } = req.body
-    if (!name || !phone || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" })
-    }
-
-    const existEmail = await customerModel.findOne({ email })
-    if (existEmail) return res.status(400).json({ error: "Email already exists" })
-
-    const hashPassword = await bcrypt.hash(password, 12)
-
-    const adminData = new customerModel({ name, phone, email, password: hashPassword, role: "admin" })
-    await adminData.save()
-
-    res.status(201).json({
-      message: "✅ Admin created successfully",
-      admin: { id: adminData._id, name: adminData.name, email: adminData.email, role: adminData.role }
-    })
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message })
-  }
-}
-
-// Create Customer
 const createCustomer = async (req, res) => {
   try {
-    const { name, phone, email, password } = req.body
+    const { name, phone, email, password } = req.body;
     if (!name || !phone || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" })
+      return res.status(400).json({ error: "All fields are required" });
     }
 
-    const existEmail = await customerModel.findOne({ email })
-    if (existEmail) return res.status(400).json({ error: "Email already exists" })
+    const existEmail = await customerModel.findOne({ email });
+    if (existEmail) return res.status(400).json({ error: "Email already exists" });
 
-    const hashPassword = await bcrypt.hash(password, 12)
-    const newData = new customerModel({ name, phone, email, password: hashPassword, role: "customer" })
-    await newData.save()
+    const hashPassword = await bcrypt.hash(password, 12);
+    const newData = new customerModel({ name, phone, email, password: hashPassword, role: "customer", isActive: true });
+    await newData.save();
 
-    const token = jwt.sign({ userId: newData._id, role: newData.role }, JWT_SECRET, { expiresIn: "24h" })
+    const token = jwt.sign({ userId: newData._id, role: newData.role }, JWT_SECRET, { expiresIn: "24h" });
 
     res.status(201).json({
       message: "✅ Customer created successfully",
       token,
       user: { id: newData._id, name: newData.name, email: newData.email, role: newData.role }
-    })
+    });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message })
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-}
+};
 
-// Customer Login
+
 const customerLogin = async (req, res) => {
   try {
-    const { email, password } = req.body
-    if (!email || !password) return res.status(400).json({ error: "Email and password required" })
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ error: "Email and password required" });
 
-    const user = await customerModel.findOne({ email, role: "customer", isActive: true })
-    if (!user) return res.status(400).json({ error: "Invalid customer credentials" })
+    const user = await customerModel.findOne({ email, role: "customer", isActive: true });
+    if (!user) return res.status(400).json({ error: "Invalid customer credentials" });
 
-    const checkPassword = await bcrypt.compare(password, user.password)
-    if (!checkPassword) return res.status(400).json({ error: "Invalid customer credentials" })
+    const checkPassword = await bcrypt.compare(password, user.password);
+    if (!checkPassword) return res.status(400).json({ error: "Invalid customer credentials" });
 
-    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: "24h" })
-    res.json({ message: "✅ Customer login successful", token, user })
+    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: "24h" });
+    res.json({ message: "✅ Customer login successful", token, user });
   } catch (error) {
-    res.status(500).json({ error: "Server error" })
+    res.status(500).json({ error: "Server error" });
   }
-}
-
-// Admin Login
-const adminLogin = async (req, res) => {
-  try {
-    const { email, password } = req.body
-    if (!email || !password) return res.status(400).json({ error: "Email and password required" })
-
-    const admin = await customerModel.findOne({ email, role: "admin", isActive: true })
-    if (!admin) return res.status(400).json({ error: "Invalid admin credentials" })
-
-    const checkPassword = await bcrypt.compare(password, admin.password)
-    if (!checkPassword) return res.status(400).json({ error: "Invalid admin credentials" })
-
-    const token = jwt.sign({ userId: admin._id, role: admin.role }, JWT_SECRET, { expiresIn: "24h" })
-    res.json({ message: "✅ Admin login successful", token, user: admin })
-  } catch (error) {
-    res.status(500).json({ error: "Server error" })
-  }
-}
+};
 
 
-// Get All Users (Admins + Customers)
 const getAllUsers = async (req, res) => {
   try {
-    const users = await customerModel.find({}, "-password"); // admins + customers
+    const users = await customerModel.find({ role: "customer" }, "-password");
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -108,50 +62,44 @@ const getAllUsers = async (req, res) => {
 };
 
 
-
-// Toggle User Active/Inactive
 const toggleUserStatus = async (req, res) => {
   try {
-    const { id } = req.params
-    const user = await customerModel.findById(id)
-    if (!user) return res.status(404).json({ message: "User not found" })
+    const { id } = req.params;
+    const user = await customerModel.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    user.isActive = !user.isActive
-    await user.save()
+    user.isActive = !user.isActive;
+    await user.save();
 
-    res.json({ message: `User ${user.isActive ? "activated" : "deactivated"} successfully`, user })
+    res.json({ message: `User ${user.isActive ? "activated" : "deactivated"} successfully`, user });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message })
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-}
+};
 
-// CustomerController.js - ADD THESE FUNCTIONS
 
-// Get current user profile
 const getProfile = async (req, res) => {
   try {
-    const user = await customerModel.findById(req.user.userId).select("-password")
-    if (!user) return res.status(404).json({ message: "User not found" })
-    
-    res.json(user)
+    const user = await customerModel.findById(req.user.userId).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message })
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-}
+};
 
-// Update user profile
+
 const updateProfile = async (req, res) => {
   try {
     if (!req.body) return res.status(400).json({ message: "No data provided" });
 
-    const { name, phone, profileImage } = req.body; // Halkan ka qaado profileImage
-
+    const { name, phone, profileImage } = req.body;
     const user = await customerModel.findById(req.user.userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     if (name) user.name = name;
     if (phone) user.phone = phone;
-    if (profileImage) user.profileImage = profileImage; // Ku keydi DB
+    if (profileImage) user.profileImage = profileImage;
 
     await user.save();
 
@@ -169,98 +117,60 @@ const updateProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
-}
-// ============================
-// 💡 Add inside CustomerController.js
-// ============================
+};
 
-// Step 1: Forgot Password (generate token)
+
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email is required" });
 
     const user = await customerModel.findOne({ email });
-    if (!user) {
-      // For security, don't reveal if email exists or not
-      return res.json({ 
-        message: "If the email exists, a reset token has been sent" 
-      });
-    }
+    if (!user) return res.json({ message: "If the email exists, a reset token has been sent" });
 
-    // Create reset token
     const resetToken = crypto.randomBytes(32).toString("hex");
-    
-    // Save token and expiration
     user.resetToken = resetToken;
-    user.resetTokenExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
-    
+    user.resetTokenExpire = Date.now() + 10 * 60 * 1000; // 10 min
     await user.save();
 
-    console.log(`Reset token for ${email}: ${resetToken}`); // For testing
+    console.log(`Reset token for ${email}: ${resetToken}`);
 
-    res.json({
-      message: "Reset token generated successfully. Use it to reset password.",
-      resetToken // In production, send this via email
-    });
+    res.json({ message: "Reset token generated successfully.", resetToken });
   } catch (error) {
-    console.error("Forgot password error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-// Step 2: Reset Password
+
+// ==========================
+// RESET PASSWORD
+// ==========================
 const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
-    if (!token || !newPassword) {
-      return res.status(400).json({ message: "Token and new password required" });
-    }
+    if (!token || !newPassword) return res.status(400).json({ message: "Token and new password required" });
+    if (newPassword.length < 6) return res.status(400).json({ message: "Password must be at least 6 characters" });
 
-    if (newPassword.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters" });
-    }
+    const user = await customerModel.findOne({ resetToken: token, resetTokenExpire: { $gt: Date.now() } });
+    if (!user) return res.status(400).json({ message: "Invalid or expired token" });
 
-    // Find user with valid token
-    const user = await customerModel.findOne({
-      resetToken: token,
-      resetTokenExpire: { $gt: Date.now() }
-    });
-
-    if (!user) {
-      return res.status(400).json({ 
-        message: "Invalid or expired token",
-        details: "Token might be wrong or expired (valid for 10 minutes)"
-      });
-    }
-
-    // Update password and clear reset token
     user.password = await bcrypt.hash(newPassword, 12);
     user.resetToken = null;
     user.resetTokenExpire = null;
-    
     await user.save();
 
-    res.json({ 
-      message: "Password reset successfully",
-      success: true 
-    });
+    res.json({ message: "Password reset successfully", success: true });
   } catch (error) {
-    console.error("Reset password error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-module.exports = { 
-  createAdmin, 
-  createCustomer, 
-  customerLogin, 
-  adminLogin, 
-  toggleUserStatus, 
+module.exports = {
+  createCustomer,
+  customerLogin,
+  toggleUserStatus,
   getAllUsers,
   getProfile,
   updateProfile,
   forgotPassword,
   resetPassword
-}
-
-
+};

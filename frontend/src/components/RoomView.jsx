@@ -4,7 +4,6 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import hotelVideo from '../assets/video/hotel.mp4';
 
 function Room() {
   const [data, setData] = useState([]);
@@ -12,7 +11,6 @@ function Room() {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch data from backend
   const handleReadData = () => {
     axios
       .post("http://localhost:7000/read/Room")
@@ -26,7 +24,6 @@ function Room() {
     handleReadData();
   }, []);
 
-  // Save to localStorage
   const handleLocalStorage = (room) => {
     const newData = JSON.parse(localStorage.getItem("products")) || [];
     const existId = newData.some((item) => String(item._id) === String(room._id));
@@ -36,11 +33,10 @@ function Room() {
       localStorage.setItem("products", JSON.stringify(newData));
       navigate("/booking"); 
     } else {
-      alert(`${room.name} is already in your bookings!`);
+      navigate("/booking");
     }
   };
 
-  // Modal controls
   const handleOpenModal = (room) => {
     setSelectedRoom(room);
     setShowModal(true);
@@ -51,14 +47,12 @@ function Room() {
     setSelectedRoom(null);
   };
 
-  // Initialize AOS animations
   useEffect(() => {
     AOS.init({ duration: 1200, once: true });
   }, []);
 
   return (
     <>
-      {/* ========== HOTEL BOOKING SECTION ========== */}
       <div className="bg-gray-100 min-h-screen p-6">
         <h2
           className="text-3xl font-bold text-gray-800 mb-8 text-center"
@@ -106,31 +100,32 @@ function Room() {
                   </p>
                 </div>
 
+                {/* Buttons & Price — spaced out */}
                 <div className="flex justify-between items-center mt-4">
                   <p className="text-purple-600 font-bold text-sm">
                     ${items.price}
                   </p>
 
-                  {/* View Details */}
-                  <button
-                    onClick={() => handleOpenModal(items)}
-                    className="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded hover:bg-blue-600 transition"
-                  >
-                    View Details
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleOpenModal(items)}
+                      className="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded hover:bg-blue-600 transition"
+                    >
+                      View
+                    </button>
 
-                  {/* Book Button */}
-                  <button
-                    onClick={() => handleLocalStorage(items)}
-                    disabled={items.status !== "Available"}
-                    className={`${
-                      items.status === "Available"
-                        ? "px-3 py-1 bg-purple-500 text-white text-xs font-semibold rounded hover:bg-purple-600 transition"
-                        : "px-3 py-1 bg-gray-300 text-gray-600 text-xs font-semibold rounded cursor-not-allowed line-through"
-                    }`}
-                  >
-                    Book
-                  </button>
+                    <button
+                      onClick={() => handleLocalStorage(items)}
+                      disabled={items.status !== "Available"}
+                      className={`${
+                        items.status === "Available"
+                          ? "px-3 py-1 bg-purple-500 text-white text-xs font-semibold rounded hover:bg-purple-600 transition"
+                          : "px-3 py-1 bg-gray-300 text-gray-600 text-xs font-semibold rounded cursor-not-allowed line-through"
+                      }`}
+                    >
+                      Book
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>

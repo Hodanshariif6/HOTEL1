@@ -29,6 +29,10 @@ function Dashboard() {
     { name: "Cabasho", icon: <FiBarChart2 />, path: "/cus" },
     { name: "Setting", icon: <FiSettings />, path: "/setting" },
   ];
+  
+  const handleLogOut = () => {
+    localStorage.removeItem("admin");
+  };
 
   return (
     <div className="flex bg-gray-100 text-gray-800 transition-all duration-300">
@@ -72,11 +76,12 @@ function Dashboard() {
             </Link>
           ))}
         </ul>
-
+<Link to= '/loginAdmin'>
         {/* logout at bottom */}
         <div className="absolute bottom-4 w-full">
           
             <li
+              onClick={handleLogOut}
             
               className="flex items-center gap-3 p-3 mx-2 rounded-md hover:bg-red-600 transition cursor-pointer text-white"
             >
@@ -85,6 +90,7 @@ function Dashboard() {
             </li>
        
         </div>
+        </Link>
       </div>
 
       {/* Main Content */}

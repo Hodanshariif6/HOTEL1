@@ -1,4 +1,3 @@
-// Auth.js - ENHANCED
 const jwt = require("jsonwebtoken")
 const JWT_SECRET = process.env.JWT_Secret || "myJwt_secret_1233"
 

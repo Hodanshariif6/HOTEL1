@@ -228,14 +228,18 @@ body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial
   .carousel.showDetail .list .item:nth-child(2) .detail { width: 60%; }
 }
 @media (max-width: 560px) {
-  .carousel { height: 620px; }
-  .carousel .list .item { width: 96%; }
-  .carousel .list .item .img { display: none; } /* simplify on small screens */
+  .carousel { height: 820px; }
+  .carousel .list .item .intro .topic .title,
+  .carousel .list .item .intro{
+ margin-top: -70%;  }
+ 
+  .carousel .list .item { width: 90%; }
+  .carousel .list .item .img { display: block; 
+    position: static; width: 70%;  max-width: none; margin: 0 auto 24px; margin-top: 90%;  } 
   .carousel.showDetail .list .item:nth-child(2) .detail { position: static; transform: none; width: 100%; text-align: left; margin-top: 24px; }
   .arrows { bottom: 12px; }
 }
 
-/* Focus styles for accessibility */
 button:focus-visible {
   outline: 3px solid #3b82f6;
   outline-offset: 2px;
@@ -324,6 +328,7 @@ input[type="text"]:focus {
     width: 100%;
   }
 }
+
 
 
 
