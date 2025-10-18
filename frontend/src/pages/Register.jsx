@@ -40,7 +40,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:7000/register/customer", {
+      const response = await axios.post("https://hotel1-vp7d.onrender.com/register/customer", {
         name: formData.name,
         phone: formData.phone,
         email: formData.email,

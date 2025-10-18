@@ -26,7 +26,7 @@ function AddRoom() {
     formData.append("img", img); 
 
     try {
-      await axios.post("http://localhost:7000/create/Room", formData, {
+      await axios.post("https://hotel1-vp7d.onrender.com/create/Room", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success("Room added successfully 🚀");

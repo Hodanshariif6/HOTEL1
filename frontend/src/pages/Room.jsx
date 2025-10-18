@@ -7,7 +7,7 @@ function Room() {
 
   const handleReadData = () => {
     axios
-      .post("http://localhost:7000/read/Room")
+      .post("https://hotel1-vp7d.onrender.com/read/Room")
       .then((res) => setData(res.data))
       .catch((err) => console.error("Error fetching data:", err));
   };
@@ -20,7 +20,7 @@ function Room() {
     if (!window.confirm("Are you sure you want to delete this room?")) return;
 
     axios
-      .delete(`http://localhost:7000/delete/Room/${id}`)
+      .delete(`https://hotel1-vp7d.onrender.com/delete/Room/${id}`)
       .then(() => {
         alert("Room deleted successfully");
         handleReadData();
@@ -69,7 +69,7 @@ function Room() {
                   <td className="py-3 px-4">{index + 1}</td>
                   <td className="py-3 px-4">
                     <img
-                      src={`http://localhost:7000/allImages/${items.prImage}`}
+                      src={`https://hotel1-vp7d.onrender.com/allImages/${items.prImage}`}
                       alt={items.name}
                       className="w-12 h-12 object-cover rounded-md border border-gray-300"
                     />
@@ -130,7 +130,7 @@ function Room() {
             >
               <div className="flex items-center gap-4 mb-3">
                 <img
-                  src={`http://localhost:7000/allImages/${items.prImage}`}
+                  src={`https://hotel1-vp7d.onrender.com/allImages/${items.prImage}`}
                   alt={items.name}
                   className="w-16 h-16 object-cover rounded-lg border border-gray-300"
                 />
