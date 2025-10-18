@@ -322,7 +322,7 @@ const handleCloseModal = () => {
         </h2>
 
         <img
-          src={`https://hotel1-1.onrender.com/allImages/${selectedProduct.prImage}`}
+          src={`http://localhost:7000/allImages/${selectedProduct.prImage}`}
           alt={selectedProduct.name}
           className="w-full h-40 object-cover rounded mb-4"
         />

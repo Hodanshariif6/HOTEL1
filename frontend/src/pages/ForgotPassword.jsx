@@ -15,7 +15,7 @@ function ForgotPassword() {
     setLoading(true);
     
     try {
-      const res = await axios.post("https://hotel1-1.onrender.com/forgot-password", { email });
+      const res = await axios.post("http://localhost:7000/forgot-password", { email });
       
       if (res.data.resetToken) {
         toast.success(`Reset token: ${res.data.resetToken} - Copy this token!`);
@@ -43,7 +43,7 @@ function ForgotPassword() {
     setLoading(true);
     
     try {
-      const res = await axios.post("https://hotel1-1.onrender.com/reset-password", { 
+      const res = await axios.post("http://localhost:7000/reset-password", { 
         token: token.trim(), 
         newPassword 
       });

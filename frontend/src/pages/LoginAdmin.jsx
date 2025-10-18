@@ -24,7 +24,7 @@ export default function LoginAdmin() {
       const trimmedEmail = formData.email.trim();
       const trimmedPassword = formData.password.trim();
 
-      const res = await axios.post("https://hotel1-1.onrender.com/login/admin", {
+      const res = await axios.post("http://localhost:7000/login/admin", {
         email: trimmedEmail,
         password: trimmedPassword,
       });
